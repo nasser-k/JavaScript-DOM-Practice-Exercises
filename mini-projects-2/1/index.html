@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic List Manager</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 8px;
+        }
+        button {
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+        .edit-mode input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-group">
+            <input type="text" id="item-input" placeholder="Enter new item">
+            <button id="add-button">Add Item</button>
+        </div>
+        <div id="list-container"></div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const itemInput = document.getElementById('item-input');
+        const addButton = document.getElementById('add-button');
+        const listContainer = document.getElementById('list-container');
+
+        // Initialize items array
+        let items = [];
+
+        // Function to render list
+        function renderList() {
+            listContainer.innerHTML = '';
+            items.forEach((item, index) => {
+                const listItem = document.createElement('div');
+                listItem.className = 'list-item';
+                
+                if (item.editing) {
+                    listItem.classList.add('edit-mode');
+                    listItem.innerHTML = `
+                        <input type="text" value="${item.text}" class="edit-input">
+                        <div class="actions">
+                            <button onclick="saveEdit(${index})">Save</button>
+                            <button onclick="cancelEdit(${index})">Cancel</button>
+                        </div>
+                    `;
+                } else {
+                    listItem.innerHTML = `
+                        <span>${item.text}</span>
+                        <div class="actions">
+                            <button onclick="editItem(${index})">Edit</button>
+                            <button onclick="deleteItem(${index})">Delete</button>
+                        </div>
+                    `;
+                }
+                listContainer.appendChild(listItem);
+            });
+        }
+
+        // Add item
+        function addItem() {
+            const text = itemInput.value.trim();
+            if (text) {
+                items.push({ text, editing: false });
+                itemInput.value = '';
+                renderList();
+            }
+        }
+
+        // Edit item
+        function editItem(index) {
+            items[index].editing = true;
+            renderList();
+        }
+
+        // Save edit
+        function saveEdit(index) {
+            const newText = document.querySelector('.edit-input').value.trim();
+            if (newText) {
+                items[index].text = newText;
+                items[index].editing = false;
+                renderList();
+            }
+        }
+
+        // Cancel edit
+        function cancelEdit(index) {
+            items[index].editing = false;
+            renderList();
+        }
+
+        // Delete item
+        function deleteItem(index) {
+            items.splice(index, 1);
+            renderList();
+        }
+
+        // Event listeners
+        addButton.addEventListener('click', addItem);
+        itemInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addItem();
+        });
+    </script>
+</body>
+</html>

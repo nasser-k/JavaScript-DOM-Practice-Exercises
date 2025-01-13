@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Counter</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        #counter {
+            color: #666;
+        }
+        .warning {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <textarea id="text-input" maxlength="200" placeholder="Start typing... (200 characters max)"></textarea>
+        <div id="counter">200 characters remaining</div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const textarea = document.getElementById('text-input');
+        const counter = document.getElementById('counter');
+        const maxLength = 200;
+
+        // Function to update character count
+        function updateCounter() {
+            const remainingChars = maxLength - textarea.value.length;
+            counter.textContent = `${remainingChars} characters remaining`;
+            
+            // Add warning class if less than 10% characters remaining
+            if (remainingChars <= 20) {
+                counter.classList.add('warning');
+            } else {
+                counter.classList.remove('warning');
+            }
+        }
+
+        // Add input event listener
+        textarea.addEventListener('input', updateCounter);
+    </script>
+</body>
+</html>

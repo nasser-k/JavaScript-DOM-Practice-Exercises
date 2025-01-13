@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Style Changer</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        select {
+            margin: 5px;
+            padding: 5px;
+        }
+        #text-block {
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <select id="font-size">
+                <option value="16px">16px</option>
+                <option value="20px">20px</option>
+                <option value="24px">24px</option>
+                <option value="32px">32px</option>
+            </select>
+
+            <select id="font-color">
+                <option value="black">Black</option>
+                <option value="red">Red</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+            </select>
+
+            <select id="font-family">
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+            </select>
+        </div>
+
+        <div id="text-block">
+            This is a sample text block that will change based on your selections.
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const textBlock = document.getElementById('text-block');
+        const fontSizeSelect = document.getElementById('font-size');
+        const fontColorSelect = document.getElementById('font-color');
+        const fontFamilySelect = document.getElementById('font-family');
+
+        // Function to update text styles
+        function updateTextStyle() {
+            textBlock.style.fontSize = fontSizeSelect.value;
+            textBlock.style.color = fontColorSelect.value;
+            textBlock.style.fontFamily = fontFamilySelect.value;
+        }
+
+        // Add event listeners
+        fontSizeSelect.addEventListener('change', updateTextStyle);
+        fontColorSelect.addEventListener('change', updateTextStyle);
+        fontFamilySelect.addEventListener('change', updateTextStyle);
+    </script>
+</body>
+</html>

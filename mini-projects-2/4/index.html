@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Switcher</title>
+    <style>
+        /* Default light theme */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f5f5f5;
+            --border-color: #dddddd;
+            --header-color: #2196F3;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-bg: #2d2d2d;
+            --border-color: #404040;
+            --header-color: #64b5f6;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1, h2 {
+            color: var(--header-color);
+        }
+
+        .theme-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switch">
+        <span class="theme-label">🌞</span>
+        <label class="switch">
+            <input type="checkbox" id="theme-toggle">
+            <span class="slider"></span>
+        </label>
+        <span class="theme-label">🌙</span>
+    </div>
+
+    <div class="container">
+        <h1>Theme Switcher Demo</h1>
+        
+        <div class="card">
+            <h2>Light/Dark Mode</h2>
+            <p>This is a sample card to demonstrate the theme switching functionality. The theme preference is saved in localStorage and persists between page reloads.</p>
+        </div>
+
+        <div class="card">
+            <h2>Features</h2>
+            <ul>
+                <li>Smooth transitions between themes</li>
+                <li>Persistent theme selection using localStorage</li>
+                <li>Responsive design</li>
+                <li>Accessible toggle switch</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // Function to set theme
+        function setTheme(isDark) {
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            themeToggle.checked = isDark;
+            // Save theme preference to localStorage
+            localStorage.setItem('darkTheme', isDark);
+        }
+
+        // Function to toggle theme
+        function toggleTheme() {
+            const isDark = themeToggle.checked;
+            setTheme(isDark);
+        }
+
+        // Add event listener for toggle
+        themeToggle.addEventListener('change', toggleTheme);
+
+        // Initialize theme from localStorage
+        function initializeTheme() {
+            // Check if theme preference exists in localStorage
+            const savedTheme = localStorage.getItem('darkTheme');
+            
+            if (savedTheme !== null) {
+                // Apply saved theme preference
+                setTheme(savedTheme === 'true');
+            } else {
+                // Check if user prefers dark mode at system level
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                setTheme(prefersDark);
+            }
+        }
+
+        // Initialize theme when page loads
+        initializeTheme();
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)')
+            .addEventListener('change', e => {
+                // Only update if no preference is saved
+                if (localStorage.getItem('darkTheme') === null) {
+                    setTheme(e.matches);
+                }
+            });
+    </script>
+</body>
+</html>
